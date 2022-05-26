@@ -1,0 +1,6 @@
+<p>Hello world</p>
+<!-- <button (click)="homeScore()">Click</button> -->
+<ng-container *ngIf="home$ | async as home">
+	<div>{{home}}</div>
+</ng-container>
+<button mat-button color="primary" (click)="homeScore()">Primary</button>
