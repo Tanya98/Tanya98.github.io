@@ -1,4 +1,4 @@
-export interface City {
+export interface CityResponse {
     country: string,
     lat: number,
     local_names: null,
