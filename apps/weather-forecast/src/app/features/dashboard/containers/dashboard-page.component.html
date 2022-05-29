@@ -1,0 +1,14 @@
+<search-city (search)="searchCity($event)" (filter)="modeFilter($event)">
+</search-city>
+<main class="weather__container">
+    <section class="weather__table-section">
+        <ng-container *ngIf="(mode$ | async) === hourlyMode">
+            <hourly-city-weather-table [dataSource]="hourlyWeatherForecastData$ | async"></hourly-city-weather-table>
+        </ng-container>
+
+        <ng-container *ngIf="(mode$| async) === dailyMode">
+            <daily-city-weather-table class="weather__daily-table" [dataSource]="dailyWeatherForecastData$ | async">
+            </daily-city-weather-table>
+        </ng-container>
+    </section>
+</main>
