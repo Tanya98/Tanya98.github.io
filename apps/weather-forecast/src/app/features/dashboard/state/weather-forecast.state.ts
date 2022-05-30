@@ -6,7 +6,7 @@ export interface WeatherForecastState {
   dailyForecast: Map<string, Map<string, string>>;
   cityDetails: CityDetails;
   forecastMode: string;
-  searchCityError: any[] | null;
+  searchCityError: [] | null;
 }
 
 export const initialState: WeatherForecastState = {

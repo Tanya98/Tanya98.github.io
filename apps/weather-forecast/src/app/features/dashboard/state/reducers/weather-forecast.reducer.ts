@@ -10,58 +10,50 @@ export const wheatherForecastReducer = createReducer(
     return { ...state, cityDetails: cityDetails };
   }),
 
-  on(
-    WeatherActions.getHourlyCityWeatherSuccess,
-    (state, { hourlyCityDetails }) => {
-      //get forecast only for 24 hours
-      const twentyFourHours = hourlyCityDetails.hourly.slice(0, 24);
-      const threeHours: number = 3;
+  on(WeatherActions.getHourlyCityWeatherSuccess, (state, { hourlyCityDetails }) => {
+    //get forecast only for 24 hours
+    const twentyFourHours = hourlyCityDetails.hourly.slice(0, 24);
+    const threeHours = 3;
 
-      //take each 3 hours
-      const everyThreeHours = twentyFourHours.filter(
-        (e, i) => i % threeHours === threeHours - 1
-      );
+    //take each 3 hours
+    const everyThreeHours = twentyFourHours.filter((e, i) => i % threeHours === threeHours - 1);
 
-      const hourly = new Map(state.hourlyForecast);
+    const hourly = new Map(state.hourlyForecast);
 
-      const hourlyForecast = new Map();
+    const hourlyForecast = new Map();
+    const timeFormat = 'HH:mm';
+    _.forEach(everyThreeHours, item => {
+      const hours = moment.unix(item.dt).format(timeFormat);
+      const temp = Math.floor(item.temp);
+      hourlyForecast.set(hours, temp);
+    });
 
-      _.forEach(everyThreeHours, (item: any) => {
-        const hours = moment.unix(item.dt).format('HH:mm');
-        const temp = Math.floor(item.temp);
-        hourlyForecast.set(hours, temp + '°');
-      });
+    hourly.set(hourlyCityDetails.name, hourlyForecast);
 
-      hourly.set(hourlyCityDetails.name, hourlyForecast);
+    return {
+      ...state,
+      hourlyForecast: hourly,
+    };
+  }),
 
-      return {
-        ...state,
-        hourlyForecast: hourly,
-      };
-    }
-  ),
+  on(WeatherActions.getDailyCityWeatherSuccess, (state, { dailyCityDetails }) => {
+    const daily = new Map(state.dailyForecast);
 
-  on(
-    WeatherActions.getDailyCityWeatherSuccess,
-    (state, { dailyCityDetails }) => {
-      const daily = new Map(state.dailyForecast);
+    const dailyForecast = new Map();
+    const dayFormat = 'dd';
+    _.forEach(dailyCityDetails.daily, (item: any) => {
+      const weekDays = moment.unix(item.dt).format(dayFormat);
+      const temp = Math.floor(item.temp.day);
+      dailyForecast.set(weekDays, temp);
+    });
 
-      const dailyForecast = new Map();
+    daily.set(dailyCityDetails.name, dailyForecast);
 
-      _.forEach(dailyCityDetails.daily, (item: any) => {
-        const weekDays = moment.unix(item.dt).format('dd');
-        const temp = Math.floor(item.temp.day);
-        dailyForecast.set(weekDays, temp + '°');
-      });
-
-      daily.set(dailyCityDetails.name, dailyForecast);
-
-      return {
-        ...state,
-        dailyForecast: daily,
-      };
-    }
-  ),
+    return {
+      ...state,
+      dailyForecast: daily,
+    };
+  }),
 
   on(WeatherActions.forecastModeChangeSuccess, (state, { forecastMode }) => {
     return { ...state, forecastMode: forecastMode };

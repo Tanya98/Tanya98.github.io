@@ -6,11 +6,7 @@ import { catchError, concatMap, map, mergeMap, of, withLatestFrom } from 'rxjs';
 import * as WeatherActions from '../actions/index';
 import { Store } from '@ngrx/store';
 import { WeatherForecastState } from '..';
-import {
-  selectCityDetails,
-  selectMode,
-  syncForecastByMode,
-} from '../selectors';
+import { selectCityDetails, selectMode, syncForecastByMode } from '../selectors';
 import { ForecastMode } from '../../enums/forecast-mode.enum';
 import { DailyCityDetails } from '../../models/daily-city-details';
 import {
@@ -21,7 +17,7 @@ import {
   HourlyCityDetails,
   HourlyCityWeatherResponse,
 } from '../../models';
-import { ToasterService } from 'apps/weather-forecast/src/app/shared/services';
+import { ToasterService } from '@wf/app/shared/services';
 
 @Injectable()
 export class WeatherForecastEffect {
@@ -41,8 +37,7 @@ export class WeatherForecastEffect {
         return this.httpService.searchNewCity(city).pipe(
           map((data: CityResponse[]) => data[0]),
           concatMap((city: CityResponse) => {
-            let cityData: CityDetails;
-            cityData = {
+            const cityData: CityDetails = {
               name: city.name,
               lon: city.lon,
               lat: city.lat,
@@ -76,7 +71,7 @@ export class WeatherForecastEffect {
 
         const actionsToDispatch = [];
 
-        for (let city of cities) {
+        for (const city of cities) {
           const request = { lat: city.lat, lon: city.lon };
 
           let forecast = new Map();
@@ -103,7 +98,7 @@ export class WeatherForecastEffect {
 
         return actionsToDispatch;
       }),
-      catchError((error) => of(WeatherActions.setCityError(error)))
+      catchError(error => of(WeatherActions.setCityError(error)))
     )
   );
 
@@ -136,9 +131,8 @@ export class WeatherForecastEffect {
       ofType(WeatherActions.getDailyCityWeather),
       withLatestFrom(this.store.select(selectCityDetails)),
       mergeMap(([payload, city]) => {
-        let cityData: CityDetails = null;
-        let cityName: string = city.name;
-        cityData = {
+        const cityName: string = city.name;
+        const cityData: CityDetails = {
           name: city.name,
           lon: city.lon,
           lat: city.lat,
@@ -163,27 +157,28 @@ export class WeatherForecastEffect {
   changeForecastMode$ = createEffect(() =>
     this.actions$.pipe(
       ofType(WeatherActions.forecastModeChange),
-      concatMap((payload: any) => {
+      concatMap(payload => {
         const mode: string = payload.forecastMode;
+
         return [
-          WeatherActions.syncForecastByMode({ forecastMode: mode }),
           WeatherActions.forecastModeChangeSuccess({ forecastMode: mode }),
+          WeatherActions.syncForecastByMode({ forecastMode: mode }),
         ];
       }),
-      catchError((error) => of(WeatherActions.forecastModeChangeError(error)))
+      catchError(error => of(WeatherActions.forecastModeChangeError(error)))
     )
   );
 
   setCity$ = createEffect(() =>
     this.actions$.pipe(
       ofType(WeatherActions.setCity),
-      map((payload) => {
+      map(payload => {
         const cityDetails = payload.cityDetails;
         return WeatherActions.setCitySuccess({
           cityDetails: cityDetails,
         });
       }),
-      catchError((error) => of(WeatherActions.setCityError(error)))
+      catchError(error => of(WeatherActions.setCityError(error)))
     )
   );
 }
