@@ -7,10 +7,11 @@
             </mat-form-field>
             <button class="search-but" mat-flat-button color="primary" type="submit">Search</button>
         </form>
-        <div class="filter-buttons">
-            <button mat-button color="primary" (click)="filterByHour()">Hourly</button>
-            <button mat-button color="primary" class="daily-but" (click)="filterByDay()">Daily</button>
-        </div>
+        <mat-button-toggle-group name="mode" aria-label="Font Style" class="filter-buttons"
+            #group="matButtonToggleGroup" value="hourlyMode">
+            <mat-button-toggle value="hourlyMode" (click)="filterByHour()">Hourly</mat-button-toggle>
+            <mat-button-toggle value="dailyMode" (click)="filterByDay()">Daily</mat-button-toggle>
+        </mat-button-toggle-group>
     </div>
     <span class="text-danger" *ngIf="searchForm.get('city').hasError('pattern')">Only Letters</span>
 

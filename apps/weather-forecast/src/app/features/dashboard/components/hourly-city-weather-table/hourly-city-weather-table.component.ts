@@ -15,11 +15,11 @@ export class HourlyCityWeatherTableComponent {
   @Input() set dataSource(value: TabularModel) {
     this._dataSource = value;
 
-    this.displayedColumns = this._dataSource.headers;
+    this.displayedColumns = this._dataSource?.headers;
 
     this.columns = [];
 
-    _.forEach(this._dataSource.headers, header => {
+    _.forEach(this._dataSource?.headers, header => {
       this.columns.push({
         columnDef: header,
         header: header,

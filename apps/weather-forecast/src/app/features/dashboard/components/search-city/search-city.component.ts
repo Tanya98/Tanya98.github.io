@@ -1,6 +1,6 @@
-import { ForecastMode } from './../../enums/forecast-mode.enum';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { ForecastMode } from '../../enums/forecast-mode.enum';
 
 @Component({
   selector: 'weather-forecast-search-city',

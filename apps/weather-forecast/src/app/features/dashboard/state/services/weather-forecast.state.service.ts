@@ -1,20 +1,12 @@
-import {
-  selectDaily,
-  selectSearchCityError,
-} from './../selectors/weather-forecast.selector';
+import { selectDaily, selectSearchCityError } from './../selectors/weather-forecast.selector';
 import { Injectable } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { map, Observable } from 'rxjs';
+import { filter, map, Observable } from 'rxjs';
 import { forecastModeChange, searchCity } from '../actions';
-import {
-  selectCities,
-  selectCityDetails,
-  selectHourly,
-  selectMode,
-} from '../selectors';
+import { selectCities, selectCityDetails, selectHourly, selectMode } from '../selectors';
 import * as _ from 'lodash';
 import { WeatherForecastState } from '..';
-import { CityDetails, TabularModel } from '../../models';
+import { CityDetails, TabularModel } from '@wf/features/dashboard/models';
 
 @Injectable()
 export class WeatherForecastStateService {
@@ -34,13 +26,14 @@ export class WeatherForecastStateService {
     this.cityDetails$ = this.store.pipe(select(selectCityDetails));
 
     this.hourlyWeatherForecast$ = this.store.select(selectHourly).pipe(
-      map((hourly) => {
+      filter(x => !!x && x.size > 0),
+      map(hourly => {
         const cities = [...hourly.keys()];
 
         let headers = [];
-        let columns: Map<string, string>[] = [];
+        const columns: Map<string, string>[] = [];
 
-        _.forEach(cities, (city) => {
+        _.forEach(cities, city => {
           const newColumn = new Map([['City Name', city], ...hourly.get(city)]);
           columns.push(newColumn);
           const empty = _.isEmpty(headers);
@@ -52,12 +45,13 @@ export class WeatherForecastStateService {
     );
 
     this.dailyWeatherForecast$ = this.store.select(selectDaily).pipe(
-      map((daily) => {
+      filter(x => !!x && x.size > 0),
+      map(daily => {
         const cities = [...daily.keys()];
 
         let headers = [];
-        let columns: Map<string, string>[] = [];
-        _.forEach(cities, (city) => {
+        const columns: Map<string, string>[] = [];
+        _.forEach(cities, city => {
           const newColumn = new Map([['City Name', city], ...daily.get(city)]);
           columns.push(newColumn);
           const empty = _.isEmpty(headers);
