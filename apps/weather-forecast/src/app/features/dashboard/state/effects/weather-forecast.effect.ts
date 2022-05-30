@@ -1,14 +1,12 @@
-import { HttpService } from './../../services/http.service';
+import { HttpService } from '@wf/features/dashboard/services';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, concatMap, map, mergeMap, of, withLatestFrom } from 'rxjs';
 
 import * as WeatherActions from '../actions/index';
 import { Store } from '@ngrx/store';
-import { WeatherForecastState } from '..';
-import { selectCityDetails, selectMode, syncForecastByMode } from '../selectors';
-import { ForecastMode } from '../../enums/forecast-mode.enum';
-import { DailyCityDetails } from '../../models/daily-city-details';
+import { selectCityDetails, selectDaily, selectHourly, selectMode, syncForecastByMode } from '../selectors';
+import { ForecastMode } from '@wf/features/dashboard/enums';
 import {
   CityDetails,
   CityResponse,
@@ -16,8 +14,11 @@ import {
   DailyCityWeatherResponse,
   HourlyCityDetails,
   HourlyCityWeatherResponse,
-} from '../../models';
+} from '@wf/features/dashboard/models';
 import { ToasterService } from '@wf/app/shared/services';
+import * as _ from 'lodash';
+import * as moment from 'moment';
+import { WeatherForecastState } from '../weather-forecast.state';
 
 @Injectable()
 export class WeatherForecastEffect {
@@ -79,20 +80,21 @@ export class WeatherForecastEffect {
           if (mode === ForecastMode.HOURLY) {
             forecast = hourlyForecast.get(city.name);
 
-            if (!forecast) {
-              const action = WeatherActions.getHourlyCityWeather({
-                value: request,
-              });
-              actionsToDispatch.push(action);
-            }
+            if (!forecast)
+              actionsToDispatch.push(
+                WeatherActions.getHourlyCityWeather({
+                  value: request,
+                })
+              );
           } else {
             forecast = dailyForecast.get(city.name);
-            if (!forecast) {
-              const action = WeatherActions.getDailyCityWeather({
-                value: request,
-              });
-              actionsToDispatch.push(action);
-            }
+
+            if (!forecast)
+              actionsToDispatch.push(
+                WeatherActions.getDailyCityWeather({
+                  value: request,
+                })
+              );
           }
         }
 
@@ -105,8 +107,8 @@ export class WeatherForecastEffect {
   getHourlyCityWeather$ = createEffect(() =>
     this.actions$.pipe(
       ofType(WeatherActions.getHourlyCityWeather),
-      withLatestFrom(this.store.select(selectCityDetails)),
-      mergeMap(([payload, city]) => {
+      withLatestFrom(this.store.select(selectCityDetails), this.store.select(selectHourly)),
+      mergeMap(([payload, city, hourlyWeatherForecast]) => {
         const cityDetails: CitySearchRequest = payload.value;
         const cityName: string = city.name;
         return this.httpService.getHourlyCityWeather(cityDetails).pipe(
@@ -116,8 +118,26 @@ export class WeatherForecastEffect {
               hourly: data.hourly,
               name: cityName,
             };
+            //get forecast only for 24 hours
+            const twentyFourHours = hourlyCityDetails.hourly.slice(0, 24);
+            const threeHours = 3;
+            //take each 3 hours
+            const everyThreeHours = twentyFourHours.filter((e, i) => i % threeHours === threeHours - 1);
+
+            const hourly = new Map(hourlyWeatherForecast);
+
+            const hourlyForecast = new Map();
+            const timeFormat = 'HH:mm';
+            _.forEach(everyThreeHours, item => {
+              const hours = moment.unix(item.dt).format(timeFormat);
+              const temp = Math.floor(item.temp);
+              hourlyForecast.set(hours, temp);
+            });
+
+            hourly.set(hourlyCityDetails.name, hourlyForecast);
+
             return WeatherActions.getHourlyCityWeatherSuccess({
-              hourlyCityDetails: hourlyCityDetails,
+              hourlyCityDetails: hourly,
             });
           }),
           catchError(() => of(WeatherActions.getHourlyCityWeatherError))
@@ -129,8 +149,8 @@ export class WeatherForecastEffect {
   getDailyCityWeather$ = createEffect(() =>
     this.actions$.pipe(
       ofType(WeatherActions.getDailyCityWeather),
-      withLatestFrom(this.store.select(selectCityDetails)),
-      mergeMap(([payload, city]) => {
+      withLatestFrom(this.store.select(selectCityDetails), this.store.select(selectDaily)),
+      mergeMap(([payload, city, dailyWeatherForecast]) => {
         const cityName: string = city.name;
         const cityData: CityDetails = {
           name: city.name,
@@ -139,13 +159,19 @@ export class WeatherForecastEffect {
         };
         return this.httpService.getDailyCityWeather(cityData).pipe(
           map((data: DailyCityWeatherResponse) => {
-            let dailyCityDetails: DailyCityDetails = null;
-            dailyCityDetails = {
-              daily: data.daily,
-              name: cityName,
-            };
+            const daily = new Map(dailyWeatherForecast);
+            const dailyForecast = new Map();
+            const dayFormat = 'dd';
+            _.forEach(data.daily, (item: any) => {
+              const weekDays = moment.unix(item.dt).format(dayFormat);
+              const temp = Math.floor(item.temp.day);
+              dailyForecast.set(weekDays, temp);
+            });
+
+            daily.set(cityName, dailyForecast);
+
             return WeatherActions.getDailyCityWeatherSuccess({
-              dailyCityDetails: dailyCityDetails,
+              dailyCityDetails: daily,
             });
           }),
           catchError(() => of(WeatherActions.getDailyCityWeatherError))

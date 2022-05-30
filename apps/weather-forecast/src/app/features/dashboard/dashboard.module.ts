@@ -1,3 +1,4 @@
+import { DegreePipe } from './pipes';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -14,6 +15,7 @@ import { wheatherForecastReducer } from './state/reducers';
 import { WeatherForecastStateService } from './state/services';
 
 const COMPONENTS = [DashboardPageComponent, SearchCityComponent, WeatherTableComponent];
+const PIPES = [DegreePipe];
 
 @NgModule({
   imports: [
@@ -26,7 +28,7 @@ const COMPONENTS = [DashboardPageComponent, SearchCityComponent, WeatherTableCom
     EffectsModule.forFeature([WeatherForecastEffect]),
   ],
   exports: [],
-  declarations: [...COMPONENTS],
+  declarations: [...COMPONENTS, ...PIPES],
   providers: [WeatherForecastStateService, HttpService],
 })
 export class DashboardModule {}

@@ -1,6 +1,6 @@
+import { TabularModel } from '@wf/features/dashboard/models';
 import { Component, Input } from '@angular/core';
 import * as _ from 'lodash';
-import { TabularModel } from '../../models';
 
 @Component({
   selector: 'weather-forecast-weather-table',
