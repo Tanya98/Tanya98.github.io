@@ -14,10 +14,7 @@
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": [
-          "libs/weather-forecast/service/**/*.ts",
-          "libs/weather-forecast/service/**/*.html"
-        ]
+        "lintFilePatterns": ["libs/weather-forecast/service/**/*.ts", "libs/weather-forecast/service/**/*.html"]
       }
     }
   },

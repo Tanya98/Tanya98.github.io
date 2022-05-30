@@ -5,7 +5,9 @@ const routes: Routes = [
   {
     path: 'weather-forecast-dahboard',
     loadChildren: () =>
-      import('./features/weather-dashboard/weather-dashboard.module').then((m) => m.WeatherDashboardModule),
+      import('./features/dashboard/dashboard.module').then(
+        (m) => m.DashboardModule
+      ),
   },
   {
     path: '',
