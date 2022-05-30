@@ -25,6 +25,7 @@
         "@ngrx/store": "^13.2.0",
         "@ngrx/store-devtools": "^13.2.0",
         "@nrwl/angular": "14.1.9",
+        "lint-staged": "^12.4.3",
         "lodash": "^4.17.21",
         "moment": "^2.29.3",
         "rxjs": "~7.4.0",
@@ -67,12 +68,12 @@
     },
     "husky": {
         "hooks": {
-            "pre-commit": "npm run prettier:check",
-            "lint-staged": {
-                "*.{js,json,css,scss,md,ts,html,graphql}": [
-                    "yarn format --uncommitted"
-                ]
-            }
+            "pre-commit": "npm run prettier:check"
         }
+    },
+    "lint-staged": {
+        "*.{js,json,css,scss,md,ts,html,graphql}": [
+            "yarn format --uncommitted"
+        ]
     }
 }
