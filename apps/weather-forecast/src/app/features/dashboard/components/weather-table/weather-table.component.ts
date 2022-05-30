@@ -1,13 +1,13 @@
-import { Component, Input } from '@angular/core';
 import { TabularModel } from '@wf/features/dashboard/models';
+import { Component, Input } from '@angular/core';
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'weather-forecast-hourly-city-weather-table',
-  templateUrl: 'hourly-city-weather-table.component.html',
-  styleUrls: ['./hourly-city-weather-table.component.scss'],
+  selector: 'weather-forecast-weather-table',
+  templateUrl: 'weather-table.component.html',
+  styleUrls: ['./weather-table.component.scss'],
 })
-export class HourlyCityWeatherTableComponent {
+export class WeatherTableComponent {
   _dataSource: TabularModel;
   get dataSource(): TabularModel {
     return this._dataSource;

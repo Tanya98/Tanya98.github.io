@@ -1,11 +1,11 @@
 <ng-container *ngIf="_dataSource">
-  <table mat-table [dataSource]="_dataSource?.columns" class="mat-elevation-z8 demo-table daily-table">
+  <table mat-table [dataSource]="_dataSource?.columns" class="mat-elevation-z8 demo-table table">
     <ng-container *ngFor="let column of columns" [matColumnDef]="column.columnDef">
       <th mat-header-cell *matHeaderCellDef>
         {{ column.header }}
       </th>
       <td mat-cell *matCellDef="let row">
-        {{ column.cell(row) }}
+        {{ column.cell(row) | degree }}
       </td>
     </ng-container>
 

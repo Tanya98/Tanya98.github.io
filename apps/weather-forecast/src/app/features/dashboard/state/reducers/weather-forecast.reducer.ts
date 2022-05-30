@@ -1,6 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
 import * as WeatherActions from '../actions/index';
-import * as moment from 'moment';
 import { initialState } from '../weather-forecast.state';
 import * as _ from 'lodash';
 
@@ -11,47 +10,16 @@ export const wheatherForecastReducer = createReducer(
   }),
 
   on(WeatherActions.getHourlyCityWeatherSuccess, (state, { hourlyCityDetails }) => {
-    //get forecast only for 24 hours
-    const twentyFourHours = hourlyCityDetails.hourly.slice(0, 24);
-    const threeHours = 3;
-
-    //take each 3 hours
-    const everyThreeHours = twentyFourHours.filter((e, i) => i % threeHours === threeHours - 1);
-
-    const hourly = new Map(state.hourlyForecast);
-
-    const hourlyForecast = new Map();
-    const timeFormat = 'HH:mm';
-    _.forEach(everyThreeHours, item => {
-      const hours = moment.unix(item.dt).format(timeFormat);
-      const temp = Math.floor(item.temp);
-      hourlyForecast.set(hours, temp);
-    });
-
-    hourly.set(hourlyCityDetails.name, hourlyForecast);
-
     return {
       ...state,
-      hourlyForecast: hourly,
+      hourlyForecast: hourlyCityDetails,
     };
   }),
 
   on(WeatherActions.getDailyCityWeatherSuccess, (state, { dailyCityDetails }) => {
-    const daily = new Map(state.dailyForecast);
-
-    const dailyForecast = new Map();
-    const dayFormat = 'dd';
-    _.forEach(dailyCityDetails.daily, (item: any) => {
-      const weekDays = moment.unix(item.dt).format(dayFormat);
-      const temp = Math.floor(item.temp.day);
-      dailyForecast.set(weekDays, temp);
-    });
-
-    daily.set(dailyCityDetails.name, dailyForecast);
-
     return {
       ...state,
-      dailyForecast: daily,
+      dailyForecast: dailyCityDetails,
     };
   }),
 

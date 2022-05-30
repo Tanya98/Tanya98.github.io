@@ -1,12 +1,34 @@
-import { selectDaily, selectSearchCityError } from './../selectors/weather-forecast.selector';
 import { Injectable } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { filter, map, Observable } from 'rxjs';
 import { forecastModeChange, searchCity } from '../actions';
-import { selectCities, selectCityDetails, selectHourly, selectMode } from '../selectors';
-import * as _ from 'lodash';
-import { WeatherForecastState } from '..';
+import {
+  selectCities,
+  selectCityDetails,
+  selectHourly,
+  selectMode,
+  selectDaily,
+  selectSearchCityError,
+} from '../selectors';
 import { CityDetails, TabularModel } from '@wf/features/dashboard/models';
+import { WeatherForecastState } from '../weather-forecast.state';
+import * as _ from 'lodash';
+
+const convert = (forcastData: Map<string, Map<string, string>>) => {
+  const cities = [...forcastData.keys()];
+
+  let headers = [];
+  const columns: Map<string, string>[] = [];
+
+  _.forEach(cities, city => {
+    const newColumn = new Map([['City Name', city], ...forcastData.get(city)]);
+    columns.push(newColumn);
+    const empty = _.isEmpty(headers);
+    if (empty) headers = [...newColumn.keys()];
+  });
+
+  return { headers, columns };
+};
 
 @Injectable()
 export class WeatherForecastStateService {
@@ -27,39 +49,12 @@ export class WeatherForecastStateService {
 
     this.hourlyWeatherForecast$ = this.store.select(selectHourly).pipe(
       filter(x => !!x && x.size > 0),
-      map(hourly => {
-        const cities = [...hourly.keys()];
-
-        let headers = [];
-        const columns: Map<string, string>[] = [];
-
-        _.forEach(cities, city => {
-          const newColumn = new Map([['City Name', city], ...hourly.get(city)]);
-          columns.push(newColumn);
-          const empty = _.isEmpty(headers);
-          if (empty) headers = [...newColumn.keys()];
-        });
-
-        return { headers, columns };
-      })
+      map(hourly => convert(hourly))
     );
 
     this.dailyWeatherForecast$ = this.store.select(selectDaily).pipe(
       filter(x => !!x && x.size > 0),
-      map(daily => {
-        const cities = [...daily.keys()];
-
-        let headers = [];
-        const columns: Map<string, string>[] = [];
-        _.forEach(cities, city => {
-          const newColumn = new Map([['City Name', city], ...daily.get(city)]);
-          columns.push(newColumn);
-          const empty = _.isEmpty(headers);
-          if (empty) headers = [...newColumn.keys()];
-        });
-
-        return { headers, columns };
-      })
+      map(daily => convert(daily))
     );
 
     this.allCities$ = this.store.select(selectCities);
