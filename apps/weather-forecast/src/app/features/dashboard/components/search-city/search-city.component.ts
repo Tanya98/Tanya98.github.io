@@ -1,13 +1,13 @@
 import { ForecastMode } from './../../enums/forecast-mode.enum';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormBuilder, Validators, NgForm, FormGroup } from '@angular/forms';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'search-city',
+  selector: 'weather-forecast-search-city',
   templateUrl: 'search-city.component.html',
   styleUrls: ['./search-city.component.scss'],
 })
-export class SearchCityComponent implements OnInit {
+export class SearchCityComponent {
   @Output() search = new EventEmitter();
   @Output() filter = new EventEmitter();
 
@@ -20,8 +20,6 @@ export class SearchCityComponent implements OnInit {
 
   public hourlyMode: string = ForecastMode.HOURLY;
   public dailyMode: string = ForecastMode.DAILY;
-
-  ngOnInit() {}
 
   searchCity(form: FormGroup): void {
     if (form.valid && form.value.city) {

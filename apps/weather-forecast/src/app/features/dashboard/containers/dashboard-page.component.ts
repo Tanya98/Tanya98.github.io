@@ -1,13 +1,12 @@
 import { CityDetails } from './../models/city-details.model';
 import { ForecastMode } from './../enums/forecast-mode.enum';
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-
-import { WeatherForecastStateService } from '../state/services';
-import { TabularModel } from '..';
+import { WeatherForecastStateService } from '@wf/features/dashboard/state/services';
+import { TabularModel } from '../models';
 
 @Component({
-  selector: 'weather-dashboard',
+  selector: 'weather-forecast-dashboard',
   templateUrl: 'dashboard-page.component.html',
   styleUrls: ['./dashboard-page.component.scss'],
 })
@@ -34,7 +33,7 @@ export class DashboardPageComponent implements OnInit {
     this.mode$ = this._state.mode$;
   }
 
-  searchCity(str: string): any {
+  searchCity(str: string) {
     this._state.searchCity(str);
   }
 

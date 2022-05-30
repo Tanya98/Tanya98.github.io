@@ -4,12 +4,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './shared';
+import { DashboardModule } from '@wf/features/dashboard';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { EffectsModule } from '@ngrx/effects';
 import { ActionReducer, StoreModule } from '@ngrx/store';
-import { DashboardModule } from './features/dashboard/dashboard.module';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { environment } from '../environments/environment';
+import { environment } from '@wf/environments/environment';
 
 export function logger(reducer: ActionReducer<any>): ActionReducer<any> {
   return (state, action) => {

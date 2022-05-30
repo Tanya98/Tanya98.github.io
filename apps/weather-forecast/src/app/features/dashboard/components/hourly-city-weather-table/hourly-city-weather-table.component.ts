@@ -1,13 +1,13 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { TabularModel } from '@wf/features/dashboard/models';
 import * as _ from 'lodash';
-import { TabularModel } from '../..';
 
 @Component({
-  selector: 'hourly-city-weather-table',
+  selector: 'weather-forecast-hourly-city-weather-table',
   templateUrl: 'hourly-city-weather-table.component.html',
   styleUrls: ['./hourly-city-weather-table.component.scss'],
 })
-export class HourlyCityWeatherTableComponent implements OnInit {
+export class HourlyCityWeatherTableComponent {
   _dataSource: TabularModel;
   get dataSource(): TabularModel {
     return this._dataSource;
@@ -19,7 +19,7 @@ export class HourlyCityWeatherTableComponent implements OnInit {
 
     this.columns = [];
 
-    _.forEach(this._dataSource.headers, (header) => {
+    _.forEach(this._dataSource.headers, header => {
       this.columns.push({
         columnDef: header,
         header: header,
@@ -31,9 +31,5 @@ export class HourlyCityWeatherTableComponent implements OnInit {
   }
 
   displayedColumns: string[];
-  columns: any = null;
-
-  constructor() {}
-
-  ngOnInit() {}
+  columns = null;
 }
