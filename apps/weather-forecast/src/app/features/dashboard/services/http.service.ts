@@ -10,7 +10,7 @@ export class HttpService {
   constructor(private http: HttpClient, private weatherForcastApiService: WeatherForecastApiService) {}
 
   private _apiKey = this.weatherForcastApiService._apiKey;
-  private url = environment.apiUrl;
+  private url = environment.baseUrl;
 
   searchNewCity(cityName: string): Observable<CityResponse[]> {
     return this.http.get<CityResponse[]>(`${this.url}/geo/1.0/direct?q=${cityName}&limit=1&appid=${this._apiKey}`);

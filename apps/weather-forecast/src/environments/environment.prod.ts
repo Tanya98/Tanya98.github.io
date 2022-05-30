@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://api.openweathermap.org'
+  baseUrl: 'https://api.openweathermap.org',
 };
