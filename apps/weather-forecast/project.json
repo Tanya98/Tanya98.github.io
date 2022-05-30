@@ -7,7 +7,7 @@
       "executor": "@angular-devkit/build-angular:browser",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "demo/apps/weather-forecast",
+        "outputPath": "dist/apps/weather-forecast",
         "index": "apps/weather-forecast/src/index.html",
         "main": "apps/weather-forecast/src/main.ts",
         "polyfills": "apps/weather-forecast/src/polyfills.ts",
