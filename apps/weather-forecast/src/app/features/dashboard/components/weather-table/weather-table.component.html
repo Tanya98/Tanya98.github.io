@@ -1,5 +1,5 @@
 <ng-container *ngIf="_dataSource">
-  <table mat-table [dataSource]="_dataSource?.columns" class="mat-elevation-z8 demo-table daily-table">
+  <table mat-table [dataSource]="_dataSource?.columns" class="mat-elevation-z8 demo-table table">
     <ng-container *ngFor="let column of columns" [matColumnDef]="column.columnDef">
       <th mat-header-cell *matHeaderCellDef>
         {{ column.header }}

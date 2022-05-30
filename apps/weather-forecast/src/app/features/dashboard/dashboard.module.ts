@@ -4,7 +4,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { SharedModule } from '@wf/app/shared';
-import { DailyCityWeatherTableComponent, HourlyCityWeatherTableComponent, SearchCityComponent } from './components';
+import { SearchCityComponent } from './components';
+import { WeatherTableComponent } from './components/weather-table';
 import { DashboardPageComponent } from './containers';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { HttpService } from './services';
@@ -12,12 +13,7 @@ import { WeatherForecastEffect } from './state/effects';
 import { wheatherForecastReducer } from './state/reducers';
 import { WeatherForecastStateService } from './state/services';
 
-const COMPONENTS = [
-  DashboardPageComponent,
-  SearchCityComponent,
-  HourlyCityWeatherTableComponent,
-  DailyCityWeatherTableComponent,
-];
+const COMPONENTS = [DashboardPageComponent, SearchCityComponent, WeatherTableComponent];
 
 @NgModule({
   imports: [
