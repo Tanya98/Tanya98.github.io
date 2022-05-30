@@ -1,9 +1,8 @@
-import { CityDetails } from './../models/city-details.model';
-import { ForecastMode } from './../enums/forecast-mode.enum';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { WeatherForecastStateService } from '@wf/features/dashboard/state/services';
-import { TabularModel } from '../models';
+import { CityDetails, TabularModel } from '../models';
+import { ForecastMode } from '../enums';
 
 @Component({
   selector: 'weather-forecast-dashboard',

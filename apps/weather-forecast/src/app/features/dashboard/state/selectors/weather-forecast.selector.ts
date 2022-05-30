@@ -1,5 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { WeatherForecastState } from '..';
+import { WeatherForecastState } from '../weather-forecast.state';
 
 export const selectWeatherForecastState = createFeatureSelector<WeatherForecastState>('weather');
 

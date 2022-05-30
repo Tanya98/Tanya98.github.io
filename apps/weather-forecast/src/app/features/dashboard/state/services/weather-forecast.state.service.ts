@@ -1,12 +1,18 @@
-import { selectDaily, selectSearchCityError } from './../selectors/weather-forecast.selector';
 import { Injectable } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { filter, map, Observable } from 'rxjs';
 import { forecastModeChange, searchCity } from '../actions';
-import { selectCities, selectCityDetails, selectHourly, selectMode } from '../selectors';
-import * as _ from 'lodash';
-import { WeatherForecastState } from '..';
+import {
+  selectCities,
+  selectCityDetails,
+  selectHourly,
+  selectMode,
+  selectDaily,
+  selectSearchCityError,
+} from '../selectors';
 import { CityDetails, TabularModel } from '@wf/features/dashboard/models';
+import { WeatherForecastState } from '../weather-forecast.state';
+import * as _ from 'lodash';
 
 const convert = (forcastData: Map<string, Map<string, string>>) => {
   const cities = [...forcastData.keys()];
