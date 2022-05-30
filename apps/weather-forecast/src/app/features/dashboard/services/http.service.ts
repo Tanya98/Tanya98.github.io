@@ -8,10 +8,10 @@ import {
   CitySearchRequest,
   DailyCityWeatherResponse,
   HourlyCityWeatherResponse,
-} from '../../features/dashboard';
+} from '..';
 
 @Injectable()
-export class WeatherForcastService {
+export class HttpService {
   constructor(
     private http: HttpClient,
     private weatherForcastApiService: WeatherForecastApiService

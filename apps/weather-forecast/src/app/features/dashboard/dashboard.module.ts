@@ -10,6 +10,7 @@ import { HourlyCityWeatherTableComponent } from './components/hourly-city-weathe
 import { SearchCityComponent } from './components/search-city';
 import { DashboardPageComponent } from './containers/dashboard-page.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
+import { HttpService } from './services';
 import { WeatherForecastEffect } from './state/effects';
 import { wheatherForecastReducer } from './state/reducers';
 import { WeatherForecastStateService } from './state/services';
@@ -32,6 +33,6 @@ import { WeatherForecastStateService } from './state/services';
     DailyCityWeatherTableComponent,
     HomePageComponent,
   ],
-  providers: [WeatherForecastStateService],
+  providers: [WeatherForecastStateService, HttpService],
 })
 export class DashboardModule {}

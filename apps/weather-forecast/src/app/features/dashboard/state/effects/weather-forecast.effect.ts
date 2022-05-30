@@ -1,8 +1,8 @@
+import { HttpService } from './../../services/http.service';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, concatMap, map, mergeMap, of, withLatestFrom } from 'rxjs';
 
-import { WeatherForcastService } from '../../../../core/services';
 import * as WeatherActions from '../actions/index';
 import { Store } from '@ngrx/store';
 import { WeatherForecastState } from '..';
@@ -27,7 +27,7 @@ import { ToasterService } from 'apps/weather-forecast/src/app/shared/services';
 export class WeatherForecastEffect {
   constructor(
     private actions$: Actions,
-    private httpService: WeatherForcastService,
+    private httpService: HttpService,
     private store: Store<WeatherForecastState>,
     private toaster: ToasterService
   ) {}
