@@ -67,7 +67,12 @@
     },
     "husky": {
         "hooks": {
-            "pre-commit": "npm run prettier:check"
+            "pre-commit": "npm run prettier:check",
+            "lint-staged": {
+                "*.{js,json,css,scss,md,ts,html,graphql}": [
+                    "yarn format --uncommitted"
+                ]
+            }
         }
     }
 }
